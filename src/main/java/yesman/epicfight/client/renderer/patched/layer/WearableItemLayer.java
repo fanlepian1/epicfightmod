@@ -101,13 +101,13 @@ public class WearableItemLayer<E extends LivingEntity, T extends LivingEntityPat
 				continue;
 			}
 			
-			boolean chestPart = false;
+			boolean firstPersonChest = false;
 			
 			if (entitypatch.isFirstPerson() && this.firstPersonModel) {
 				if (slot != EquipmentSlot.CHEST) {
 					continue;
 				} else {
-					chestPart = true;
+					firstPersonChest = true;
 				}
 			}
 			
@@ -169,9 +169,15 @@ public class WearableItemLayer<E extends LivingEntity, T extends LivingEntityPat
 				
 				armorMesh.initialize();
 				
-				if (chestPart) {
-					if (armorMesh.hasPart("torso")) {
-						armorMesh.getPart("torso").setHidden(true);
+				if (firstPersonChest) {
+					armorMesh.getAllParts().forEach(part -> part.setHidden(true));
+					
+					if (armorMesh.hasPart("leftArm")) {
+						armorMesh.getPart("leftArm").setHidden(false);
+					}
+					
+					if (armorMesh.hasPart("rightArm")) {
+						armorMesh.getPart("rightArm").setHidden(false);
 					}
 				}
 				
@@ -230,6 +236,33 @@ public class WearableItemLayer<E extends LivingEntity, T extends LivingEntityPat
 				
 				PoseStack ps = new PoseStack();
 				ps.translate(0, 0, 10000);
+				
+				boolean falsu = false;
+				
+				if (forgeHooksArmorModel instanceof HumanoidModel<?> humanoidModel && falsu) {
+					//Setup default visibility
+					switch (slot) {
+					case FEET -> {
+						humanoidModel.rightLeg.visible = true;
+						humanoidModel.leftLeg.visible = true;
+					}
+					case LEGS -> {
+						humanoidModel.body.visible = true;
+						humanoidModel.rightLeg.visible = true;
+						humanoidModel.leftLeg.visible = true;
+					}
+					case CHEST -> {
+						humanoidModel.body.visible = true;
+						humanoidModel.rightArm.visible = true;
+						humanoidModel.leftArm.visible = true;
+					}
+					case HEAD -> {
+						humanoidModel.head.visible = true;
+						humanoidModel.hat.visible = true;
+					}
+					default -> {}
+					}
+				}
 				
 				//Render armor to get the visibility of each part
 				originalRenderer.render(ps, Minecraft.getInstance().renderBuffers().bufferSource(), 0, entityliving, 0, 0, 0, 0, 0, 0);
