@@ -288,7 +288,7 @@ public class CapabilityItem {
 	
 	public final Map<Attribute, AttributeModifier> getDamageAttributesInCondition(Style style) {
 		Map<Attribute, AttributeModifier> attributes = this.attributeMap.getOrDefault(style, Maps.newHashMap());
-		//this.attributeMap.getOrDefault(Styles.COMMON, Maps.newHashMap()).forEach(attributes::putIfAbsent);
+		this.attributeMap.getOrDefault(Styles.COMMON, Maps.newHashMap()).forEach(attributes::putIfAbsent);
 		
 		return attributes;
 	}
