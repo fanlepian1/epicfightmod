@@ -245,7 +245,7 @@ public abstract class LivingEntityPatch<T extends LivingEntity> extends Hurtable
 	 * Swap item and attributes of mainhand for offhand item and attributes
 	 * You must call {@link LivingEntityPatch#recoverMainhandDamage} method again after finishing the damaging process.
 	 */
-	protected void setOffhandDamage(InteractionHand hand, Collection<AttributeModifier> mainhandAttributes, Collection<AttributeModifier> offhandAttributes) {
+	protected void setOffhandDamage(InteractionHand hand, ItemStack mainhandItemStack, ItemStack offhandItemStack, boolean offhandValid, Collection<AttributeModifier> mainhandAttributes, Collection<AttributeModifier> offhandAttributes) {
 		if (hand == InteractionHand.MAIN_HAND) {
 			return;
 		}
@@ -253,10 +253,8 @@ public abstract class LivingEntityPatch<T extends LivingEntity> extends Hurtable
 		/**
 		 * Swap hand items to decrease the durability of offhand item
 		 */
-		ItemStack mainHandItem = this.getOriginal().getMainHandItem();
-		ItemStack offHandItem = this.getOriginal().getOffhandItem();
-		this.getOriginal().setItemInHand(InteractionHand.MAIN_HAND, offHandItem);
-		this.getOriginal().setItemInHand(InteractionHand.OFF_HAND, mainHandItem);
+		this.getOriginal().setItemInHand(InteractionHand.MAIN_HAND, offhandValid ? offhandItemStack : ItemStack.EMPTY);
+		this.getOriginal().setItemInHand(InteractionHand.OFF_HAND, mainhandItemStack);
 		
 		/**
 		 * Swap item's attributes before {@link LivingEntity#setItemInHand} called
@@ -269,15 +267,13 @@ public abstract class LivingEntityPatch<T extends LivingEntity> extends Hurtable
 	/**
 	 * Set mainhand item's attribute modifiers
 	 */
-	protected void recoverMainhandDamage(InteractionHand hand, Collection<AttributeModifier> mainhandAttributes, Collection<AttributeModifier> offhandAttributes) {
+	protected void recoverMainhandDamage(InteractionHand hand, ItemStack mainhandItemStack, ItemStack offhandItemStack, Collection<AttributeModifier> mainhandAttributes, Collection<AttributeModifier> offhandAttributes) {
 		if (hand == InteractionHand.MAIN_HAND) {
 			return;
 		}
 		
-		ItemStack mainHandItem = this.getOriginal().getMainHandItem();
-		ItemStack offHandItem = this.getOriginal().getOffhandItem();
-		this.getOriginal().setItemInHand(InteractionHand.MAIN_HAND, offHandItem);
-		this.getOriginal().setItemInHand(InteractionHand.OFF_HAND, mainHandItem);
+		this.getOriginal().setItemInHand(InteractionHand.MAIN_HAND, mainhandItemStack);
+		this.getOriginal().setItemInHand(InteractionHand.OFF_HAND, offhandItemStack);
 		
 		AttributeInstance damageAttributeInstance = this.original.getAttribute(Attributes.ATTACK_DAMAGE);
 		offhandAttributes.forEach(damageAttributeInstance::removeModifier);
