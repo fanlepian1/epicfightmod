@@ -467,7 +467,7 @@ public class EntityEvents {
 		
 		if (event.getSlot() != EquipmentSlot.OFFHAND) {
 			if (fromCap != null) {
-				event.getEntity().getAttributes().removeAttributeModifiers(fromCap.getAttributeModifiers(event.getSlot(), entitypatch));
+				event.getEntity().getAttributes().removeAttributeModifiers(fromCap.getAttributeModifiers(event.getSlot(), entitypatch, true));
 			}
 			
 			if (toCap != null) {
@@ -491,7 +491,6 @@ public class EntityEvents {
 			event.setNewSize(EntityDimensions.scalable(5.0F, 3.0F));
 		}
 	}
-	
 	
 	@SubscribeEvent
 	public static void effectAddEvent(MobEffectEvent.Added event) {

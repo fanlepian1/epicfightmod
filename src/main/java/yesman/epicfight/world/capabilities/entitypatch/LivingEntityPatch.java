@@ -63,6 +63,7 @@ import yesman.epicfight.network.server.SPPlayAnimation;
 import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageSources;
 import yesman.epicfight.world.damagesource.StunType;
@@ -106,6 +107,8 @@ public abstract class LivingEntityPatch<T extends LivingEntity> extends Hurtable
 	public LivingMotion currentLivingMotion = LivingMotions.IDLE;
 	public LivingMotion currentCompositeMotion = LivingMotions.IDLE;
 	
+	private Style oStyle;
+	
 	@Override
 	public void onConstructed(T entityIn) {
 		super.onConstructed(entityIn);
@@ -136,6 +139,8 @@ public abstract class LivingEntityPatch<T extends LivingEntity> extends Hurtable
 	
 	@Override
 	public void tick(LivingEvent.LivingTickEvent event) {
+		this.oStyle = this.getHoldingItemCapability(InteractionHand.MAIN_HAND).getStyle(this);
+		
 		if (this.original.getHealth() <= 0.0F) {
 			this.original.setXRot(0);
 			
@@ -704,6 +709,10 @@ public abstract class LivingEntityPatch<T extends LivingEntity> extends Hurtable
 			return layerInfo.getSecond().getPhaseByTime(layerInfo.getFirst().getElapsedTime()).hand;
 		}		
 		return null;
+	}
+	
+	public Style getOldStyle() {
+		return this.oStyle;
 	}
 	
 	public LivingMotion getCurrentLivingMotion() {
