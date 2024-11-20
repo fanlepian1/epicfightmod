@@ -233,13 +233,11 @@ public class WearableItemLayer<E extends LivingEntity, T extends LivingEntityPat
 					armorItemList.set(3, ItemStack.EMPTY);
 					armorItemList.set(slot.getIndex(), itemstack);
 				}
-				
+
 				PoseStack ps = new PoseStack();
 				ps.translate(0, 0, 10000);
 				
-				boolean falsu = false;
-				
-				if (forgeHooksArmorModel instanceof HumanoidModel<?> humanoidModel && falsu) {
+				if (forgeHooksArmorModel instanceof HumanoidModel<?> humanoidModel) {
 					//Setup default visibility
 					switch (slot) {
 					case FEET -> {
